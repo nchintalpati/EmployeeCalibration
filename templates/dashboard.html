@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<p>Welcome, {{ user.username }}!</p>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h3 class="card-title">9-Box Performance Grid</h3>
+  </div>
+  <div class="card-body">
+    <div class="nine-box-grid">
+      <div class="grid-row">
+        <div class="grid-cell y-axis-label">Developing</div>
+        <div class="grid-cell">
+          {% for emp in grid[0][0] %}<span class="badge bg-secondary">{{ emp.name }}</span>{% endfor %}
+        </div>
+        <div class="grid-cell">
+          {% for emp in grid[0][1] %}<span class="badge bg-secondary">{{ emp.name }}</span>{% endfor %}
+        </div>
+        <div class="grid-cell">
+          {% for emp in grid[0][2] %}<span class="badge bg-success">{{ emp.name }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell y-axis-label">Achieving</div>
+        <div class="grid-cell">
+          {% for emp in grid[1][0] %}<span class="badge bg-secondary">{{ emp.name }}</span>{% endfor %}
+        </div>
+        <div class="grid-cell">
+          {% for emp in grid[1][1] %}<span class="badge bg-primary">{{ emp.name }}</span>{% endfor %}
+        </div>
+        <div class="grid-cell">
+          {% for emp in grid[1][2] %}<span class="badge bg-success">{{ emp.name }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell y-axis-label">Exceeding</div>
+        <div class="grid-cell">
+          {% for emp in grid[2][0] %}<span class="badge bg-warning">{{ emp.name }}</span>{% endfor %}
+        </div>
+        <div class="grid-cell">
+          {% for emp in grid[2][1] %}<span class="badge bg-success">{{ emp.name }}</span>{% endfor %}
+        </div>
+        <div class="grid-cell">
+          {% for emp in grid[2][2] %}<span class="badge bg-success">{{ emp.name }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell y-axis-label"></div>
+        <div class="grid-cell x-axis-label">Developing</div>
+        <div class="grid-cell x-axis-label">Achieving</div>
+        <div class="grid-cell x-axis-label">Exceeding</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Employee Details</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Manager</th>
+          <th>Latest Behavior</th>
+          <th>Latest Result</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for data in employees_performance %}
+        <tr>
+          <td>{{ data.employee.name }}</td>
+          <td>{{ data.employee.manager.username }}</td>
+          <td>{{ data.behavior }}</td>
+          <td>{{ data.result }}</td>
+          <td>
+            <a href="{{ url_for('add_comment', employee_id=data.employee.id) }}" class="btn btn-sm btn-primary">Add Comment</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

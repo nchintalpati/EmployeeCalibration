@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Comment{% endblock %}
+
+{% block content %}
+<h2>Add Calibration Comment for {{ employee.name }}</h2>
+<form method="post">
+  <div class="mb-3">
+    <label for="comment_type" class="form-label">Comment Type</label>
+    <select class="form-select" id="comment_type" name="comment_type">
+      <option value="Behavior">Behavior</option>
+      <option value="Result">Result</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="comment" class="form-label">Comment</label>
+    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

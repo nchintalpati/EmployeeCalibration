@@ -1,0 +1,33 @@
+.nine-box-grid {
+  display: grid;
+  grid-template-columns: 100px repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr) 50px;
+  border: 1px solid #dee2e6;
+}
+
+.grid-cell {
+  border: 1px solid #dee2e6;
+  padding: 1rem;
+  min-height: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+.grid-cell.y-axis-label, .grid-cell.x-axis-label {
+  background-color: #f8f9fa;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+}
+
+.grid-row {
+  display: contents;
+}
+
+.badge {
+  font-size: 0.9rem;
+}
