@@ -1,10 +1,14 @@
 import os
+import logging
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import openai
 
 load_dotenv()
+
+# Basic Logging Setup
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -127,20 +131,30 @@ def dashboard():
 import json
 
 def get_openai_analysis(comment):
+    app.logger.info(f"Requesting OpenAI analysis for comment: '{comment}'")
     try:
         response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"Analyze the following performance review comment and return the sentiment (Positive, Neutral, Negative) and performance classification (Exceeding, Achieving, Developing). Return the output as a JSON object with keys 'sentiment' and 'classification'.\n\nComment: \"{comment}\"\n\nJSON output:",
-            max_tokens=50,
-            n=1,
-            stop=None,
-            temperature=0.5,
+            model="gpt-3.5-turbo-instruct",
+            prompt=f"Analyze the following performance review comment and return ONLY a single valid JSON object with two keys: 'sentiment' (string: 'Positive', 'Neutral', or 'Negative') and 'classification' (string: 'Exceeding', 'Achieving', or 'Developing').\n\nComment: \"{comment}\"\n\nJSON:",
+            max_tokens=60,
+            temperature=0.2,
         )
-        result = json.loads(response.choices[0].text.strip())
-        return result.get('sentiment', 'N/A'), result.get('classification', 'N/A')
+        raw_response = response.choices[0].text.strip()
+        app.logger.info(f"OpenAI raw response: {raw_response}")
+
+        result = json.loads(raw_response)
+        sentiment = result.get('sentiment', 'N/A')
+        classification = result.get('classification', 'N/A')
+
+        app.logger.info(f"Successfully parsed sentiment: {sentiment}, classification: {classification}")
+        return sentiment, classification
+    except json.JSONDecodeError as e:
+        app.logger.error(f"Failed to decode JSON from OpenAI response: {e}")
+        app.logger.error(f"Raw response was: {raw_response}")
+        return "Error", "JSON Parse Error"
     except Exception as e:
-        print(f"Error calling OpenAI API: {e}")
-        return "N/A", "N/A"
+        app.logger.error(f"An unexpected error occurred calling OpenAI API: {e}")
+        return "Error", "API Call Failed"
 
 from flask import abort
 

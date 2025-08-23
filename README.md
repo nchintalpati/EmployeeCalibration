@@ -46,6 +46,13 @@ This is a web application designed to help engineering managers and leads conduc
     ```
     The application will be available at `http://127.0.0.1:5000`.
 
+## Troubleshooting
+
+- **AI analysis is not working or returning errors:**
+  1. **Check your API Key:** Ensure that you have created a `.env` file from the `.env.example` and that your `OPENAI_API_KEY` is correct and has been saved in it.
+  2. **Check the Logs:** The application writes detailed logs to `app.log`. If the OpenAI API call is failing, this file will contain the specific error message from the API. This is the best place to look for clues.
+  3. **Check OpenAI Account:** Make sure your OpenAI account is active and has credits available.
+
 ## Future Extensions
 
 This application is built to be extensible. Here are some potential features that could be added in the future:
